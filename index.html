@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PolicyLens — Plain-English Policy Decoder</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🔍</span>
+        <span class="logo-text">PolicyLens</span>
+      </div>
+      <nav class="header-nav">
+        <a href="#how-it-works">How it works</a>
+        <button id="themeToggle" class="btn-icon" title="Toggle dark mode">🌙</button>
+        <button id="settingsBtn" class="btn-icon" title="Settings">⚙️</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== SETTINGS MODAL ===== -->
+  <div id="settingsModal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="modal-close" id="closeSettings">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">AI Model</label>
+        <select id="modelSelect" class="input">
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash (Recommended — fast &amp; capable)</option>
+          <option value="gemini-1.5-flash">Gemini 1.5 Flash (Stable)</option>
+          <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B (Fastest)</option>
+        </select>
+        <p class="hint-text" style="margin-top:0.5rem">
+          Powered by the Google Gemini API. No API key required — it's handled securely on the server.
+        </p>
+
+        <button class="btn btn-primary" id="saveSettings" style="margin-top:1.5rem;width:100%">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APP ===== -->
+  <main class="main">
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-inner">
+        <div class="hero-badge">AI-Powered Legal Plain-English Decoder</div>
+        <h1 class="hero-title">Stop drowning in<br/><span class="gradient-text">policy jargon</span></h1>
+        <p class="hero-subtitle">
+          Upload any dense policy document — tax code, GDPR clause, HIPAA rule, employment contract —
+          and get a structured, plain-English breakdown tailored to your role. Then ask follow-up questions.
+        </p>
+        <div class="hero-actions">
+          <a href="#upload-section" class="btn btn-primary btn-lg">Try it now →</a>
+          <a href="#how-it-works" class="btn btn-ghost btn-lg">See how it works</a>
+        </div>
+        <div class="hero-chips">
+          <span class="chip">📄 Tax Regulations</span>
+          <span class="chip">🔒 GDPR &amp; Privacy</span>
+          <span class="chip">🏥 HIPAA Rules</span>
+          <span class="chip">👔 Employment Law</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="section-inner">
+        <h2 class="section-title">How it works</h2>
+        <div class="steps-grid">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-icon">📂</div>
+            <h3>Upload your document</h3>
+            <p>PDF, DOCX, or plain text. Your file stays in your browser — it's never stored on any server.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-icon">🎭</div>
+            <h3>Choose your role</h3>
+            <p>Tell us who you are so the breakdown is tailored to what actually matters for you.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-icon">⚡</div>
+            <h3>Get your breakdown</h3>
+            <p>Receive a structured, plain-English analysis with key obligations, deadlines, and jargon explained.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-icon">💬</div>
+            <h3>Ask follow-up questions</h3>
+            <p>Chat with the document. Ask anything — the AI remembers the full context of your policy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== UPLOAD SECTION ===== -->
+    <section class="upload-section" id="upload-section">
+      <div class="section-inner">
+        <h2 class="section-title">Decode your document</h2>
+
+        <!-- Step 1: Role Selector -->
+        <div class="card" id="roleCard">
+          <div class="card-header">
+            <span class="step-badge">Step 1</span>
+            <h3>Who are you? <span class="required">*</span></h3>
+            <p class="card-subtitle">We'll tailor the breakdown to what matters most for your situation.</p>
+          </div>
+          <div class="role-grid" id="roleGrid">
+            <label class="role-card">
+              <input type="radio" name="role" value="individual" />
+              <span class="role-icon">👤</span>
+              <span class="role-name">Individual / Employee</span>
+              <span class="role-desc">My personal rights &amp; obligations</span>
+            </label>
+            <label class="role-card">
+              <input type="radio" name="role" value="small_business" />
+              <span class="role-icon">🏪</span>
+              <span class="role-name">Small Business Owner</span>
+              <span class="role-desc">Compliance, liability &amp; operations</span>
+            </label>
+            <label class="role-card">
+              <input type="radio" name="role" value="hr_manager" />
+              <span class="role-icon">📋</span>
+              <span class="role-name">HR / Compliance Manager</span>
+              <span class="role-desc">Policy enforcement &amp; reporting</span>
+            </label>
+            <label class="role-card">
+              <input type="radio" name="role" value="student" />
+              <span class="role-icon">🎓</span>
+              <span class="role-name">Student / Researcher</span>
+              <span class="role-desc">Understanding concepts &amp; implications</span>
+            </label>
+            <label class="role-card">
+              <input type="radio" name="role" value="developer" />
+              <span class="role-icon">💻</span>
+              <span class="role-name">Developer / Technical</span>
+              <span class="role-desc">Technical implementation &amp; systems</span>
+            </label>
+            <label class="role-card">
+              <input type="radio" name="role" value="general" />
+              <span class="role-icon">🌐</span>
+              <span class="role-name">General / Other</span>
+              <span class="role-desc">Give me a balanced overview</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 2: Upload -->
+        <div class="card" id="uploadCard">
+          <div class="card-header">
+            <span class="step-badge">Step 2</span>
+            <h3>Upload your policy document</h3>
+            <p class="card-subtitle">PDF, DOCX, or TXT. Max 10MB. Never stored — processed locally in your browser.</p>
+          </div>
+          <div
+            class="dropzone"
+            id="dropzone"
+            role="button"
+            tabindex="0"
+            aria-label="Drop your document here or click to upload"
+          >
+            <div class="dropzone-idle" id="dropzoneIdle">
+              <div class="dropzone-icon">📄</div>
+              <p class="dropzone-text">Drag &amp; drop your document here</p>
+              <p class="dropzone-subtext">or click to browse</p>
+              <div class="dropzone-formats">PDF · DOCX · TXT</div>
+            </div>
+            <div class="dropzone-loaded hidden" id="dropzoneLoaded">
+              <div class="file-preview" id="filePreview"></div>
+              <button class="btn btn-ghost btn-sm" id="removeFile">Remove file</button>
+            </div>
+            <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.text" class="file-input-hidden" />
+          </div>
+
+          <!-- Text preview -->
+          <div class="extracted-preview hidden" id="extractedPreview">
+            <div class="extracted-preview-header">
+              <span>📝 Extracted text preview</span>
+              <span id="charCount" class="char-count"></span>
+            </div>
+            <pre id="extractedText" class="extracted-text"></pre>
+          </div>
+        </div>
+
+        <!-- Analyze Button -->
+        <div class="analyze-row">
+          <button class="btn btn-primary btn-xl" id="analyzeBtn" disabled>
+            <span id="analyzeBtnText">⚡ Analyze Document</span>
+            <span class="btn-spinner hidden" id="analyzeSpinner">
+              <span class="spinner"></span> Analyzing...
+            </span>
+          </button>
+          <p class="analyze-hint" id="analyzeHint">Select a role and upload a document to begin.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== RESULTS SECTION ===== -->
+    <section class="results-section hidden" id="resultsSection">
+      <div class="section-inner">
+
+        <!-- Results Header -->
+        <div class="results-header">
+          <div>
+            <h2 class="section-title" style="margin-bottom:0.25rem">Your Breakdown</h2>
+            <p class="results-meta" id="resultsMeta"></p>
+          </div>
+          <div class="results-actions">
+            <button class="btn btn-ghost btn-sm" id="copyResultsBtn">📋 Copy</button>
+            <button class="btn btn-ghost btn-sm" id="resetBtn">↩ New Document</button>
+          </div>
+        </div>
+
+        <!-- Risk Badge -->
+        <div id="riskBadgeRow" class="risk-badge-row hidden">
+          <span id="riskBadge" class="risk-badge"></span>
+          <span id="documentType" class="doc-type-badge"></span>
+        </div>
+
+        <!-- Breakdown Cards -->
+        <div class="breakdown-grid" id="breakdownGrid">
+
+          <!-- TL;DR -->
+          <div class="breakdown-card card full-width" id="tldrCard">
+            <div class="bcard-icon">📋</div>
+            <div class="bcard-content">
+              <h3 class="bcard-title">TL;DR — The Short Version</h3>
+              <p class="bcard-body" id="tldrBody"></p>
+            </div>
+          </div>
+
+          <!-- Key Points -->
+          <div class="breakdown-card card" id="keyPointsCard">
+            <div class="bcard-icon">📌</div>
+            <div class="bcard-content">
+              <h3 class="bcard-title">Key Points</h3>
+              <ul class="bcard-list" id="keyPointsList"></ul>
+            </div>
+          </div>
+
+          <!-- Your Obligations -->
+          <div class="breakdown-card card" id="obligationsCard">
+            <div class="bcard-icon">✅</div>
+            <div class="bcard-content">
+              <h3 class="bcard-title">What You Must Do</h3>
+              <ul class="bcard-list obligations-list" id="obligationsList"></ul>
+            </div>
+          </div>
+
+          <!-- Audience Specific -->
+          <div class="breakdown-card card" id="audienceCard">
+            <div class="bcard-icon">🎯</div>
+            <div class="bcard-content">
+              <h3 class="bcard-title">What This Means For You</h3>
+              <p class="bcard-body" id="audienceBody"></p>
+            </div>
+          </div>
+
+          <!-- Deadlines -->
+          <div class="breakdown-card card" id="deadlinesCard">
+            <div class="bcard-icon">📅</div>
+            <div class="bcard-content">
+              <h3 class="bcard-title">Important Dates &amp; Deadlines</h3>
+              <ul class="bcard-list" id="deadlinesList"></ul>
+            </div>
+          </div>
+
+          <!-- Action Items -->
+          <div class="breakdown-card card" id="actionItemsCard">
+            <div class="bcard-icon">⚡</div>
+            <div class="bcard-content">
+              <h3 class="bcard-title">Action Items</h3>
+              <ul class="bcard-list action-list" id="actionItemsList"></ul>
+            </div>
+          </div>
+
+          <!-- Glossary -->
+          <div class="breakdown-card card full-width" id="glossaryCard">
+            <div class="bcard-icon">🔍</div>
+            <div class="bcard-content">
+              <h3 class="bcard-title">Jargon Explained</h3>
+              <div class="glossary-grid" id="glossaryGrid"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ===== CHAT SECTION ===== -->
+        <div class="chat-section" id="chatSection">
+          <div class="chat-header">
+            <h3>💬 Ask Follow-up Questions</h3>
+            <p>The AI has full context of your document. Ask anything.</p>
+          </div>
+
+          <div class="chat-messages" id="chatMessages">
+            <div class="chat-message assistant-message">
+              <div class="message-avatar">🔍</div>
+              <div class="message-bubble">
+                I've analyzed your document. Feel free to ask me anything about it — specific clauses, what they mean for you, deadlines, exceptions, or anything else you're wondering about.
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-row">
+            <input
+              type="text"
+              id="chatInput"
+              class="chat-input"
+              placeholder="Ask a question about this document..."
+              autocomplete="off"
+            />
+            <button class="btn btn-primary" id="sendChatBtn">Send</button>
+          </div>
+          <p class="chat-hint">Try: "What are the penalties for non-compliance?" or "Do I need to do anything before March?"</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== ERROR SECTION ===== -->
+    <div class="error-toast hidden" id="errorToast">
+      <span id="errorMsg">Something went wrong.</span>
+      <button id="closeError">✕</button>
+    </div>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>
+        Built with ❤️ using the
+        <a href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noopener">Google Gemini API</a> (free tier).
+        Open source on
+        <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+      <p class="footer-disclaimer">
+        PolicyLens provides plain-English summaries for informational purposes only.
+        This is not legal advice. Always consult a qualified professional for legal or compliance decisions.
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
