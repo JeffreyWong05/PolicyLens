@@ -13,7 +13,7 @@
 // STATE
 // =====================================================
 const state = {
-  model:       'gemini-1.5-flash-latest',
+  model:       'gemini-1.5-flash',
   role:        '',
   rawText:     '',
   fileName:    '',

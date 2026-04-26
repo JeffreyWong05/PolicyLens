@@ -10,9 +10,7 @@
 // =====================================================
 
 const ALLOWED_MODELS = new Set([
-  'gemini-1.5-flash-latest',
-  'gemini-1.5-flash-8b-latest',
-  'gemini-2.0-flash',
+  'gemini-1.5-flash',
 ]);
 
 exports.handler = async (event) => {
@@ -70,7 +68,7 @@ exports.handler = async (event) => {
   }
 
   // Build and forward the Gemini API request
-  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const geminiUrl = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`;
 
   const geminiBody = {
     system_instruction: { parts: [{ text: systemPrompt }] },
