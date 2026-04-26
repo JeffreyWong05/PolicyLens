@@ -67,16 +67,24 @@ exports.handler = async (event) => {
     };
   }
 
-  // Build and forward the Gemini API request
+  // Build and forward the Gemini API request.
+  // We use the v1 stable endpoint with gemini-1.5-flash.
+  // v1 does not support system_instruction or responseMimeType,
+  // so we prepend the system prompt to the first user message instead.
   const geminiUrl = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`;
 
+  const [firstMessage, ...rest] = messages;
+  const firstText = firstMessage?.parts?.[0]?.text || '';
+  const contentsWithSystem = [
+    { role: 'user', parts: [{ text: `${systemPrompt}\n\n${firstText}` }] },
+    ...rest,
+  ];
+
   const geminiBody = {
-    system_instruction: { parts: [{ text: systemPrompt }] },
-    contents: messages,
+    contents: contentsWithSystem,
     generationConfig: {
       maxOutputTokens: 8192,
       temperature: 0.2,
-      ...(jsonMode ? { responseMimeType: 'application/json' } : {}),
     },
   };
 
