@@ -10,9 +10,9 @@
 // =====================================================
 
 const ALLOWED_MODELS = new Set([
+  'gemini-1.5-flash-latest',
+  'gemini-1.5-flash-8b-latest',
   'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-8b',
 ]);
 
 exports.handler = async (event) => {
