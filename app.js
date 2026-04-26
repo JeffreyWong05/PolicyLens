@@ -286,7 +286,10 @@ async function callGemini(messages, systemPrompt, { jsonMode = false } = {}) {
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
-    const msg = err?.error || err?.error?.message || '';
+    // Gemini nests its message inside err.error.message — unwrap it safely
+    const msg = err?.error?.message || (typeof err?.error === 'string' ? err.error : '') || err?.message || '';
+    if (response.status === 400) throw new Error(`Bad request: ${msg || 'check that the API key has no restrictions.'}`);
+    if (response.status === 403) throw new Error('API key permission denied (403). In Google AI Studio, open your API key and make sure it has no API restrictions, or delete it and create a fresh one.');
     if (response.status === 429) throw new Error('Rate limit reached — please wait a moment and try again.');
     if (response.status === 500) throw new Error('Server configuration error. The API key may not be set up yet.');
     if (response.status === 503) throw new Error('Gemini API is temporarily unavailable. Please try again.');
