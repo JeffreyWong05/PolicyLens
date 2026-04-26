@@ -2,7 +2,7 @@
    PolicyLens — app.js
    Core application logic:
      - PDF / DOCX / TXT text extraction
-     - Google Gemini API via /api/gemini proxy (key stays on server)
+     - Google Gemini API via /.netlify/functions/gemini proxy (key stays on server)
      - Structured breakdown rendering
      - Follow-up Q&A chat
    ===================================================== */
@@ -266,14 +266,14 @@ function updateAnalyzeButton() {
 }
 
 // =====================================================
-// GEMINI API CALL — via /api/gemini proxy
+// GEMINI API CALL — via /.netlify/functions/gemini proxy
 // =====================================================
 // The browser never touches the Gemini API directly.
 // All requests go to our Vercel serverless function,
 // which holds the API key securely as an env variable.
 
 async function callGemini(messages, systemPrompt, { jsonMode = false } = {}) {
-  const response = await fetch('/api/gemini', {
+  const response = await fetch('/.netlify/functions/gemini', {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
