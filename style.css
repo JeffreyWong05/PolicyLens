@@ -432,6 +432,43 @@ a:hover { text-decoration: underline; }
 }
 
 /* =====================================================
+   COMPACT HERO BANNER
+   ===================================================== */
+.hero-compact {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg) 60%);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="dark"] .hero-compact {
+  background: linear-gradient(135deg, #1e1b4b 0%, var(--bg) 70%);
+}
+.hero-compact-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 1.5rem;
+  text-align: center;
+}
+.hero-title-compact {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+.hero-subtitle-compact {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 1rem;
+  line-height: 1.6;
+}
+.hero-compact .hero-chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* =====================================================
    HOW IT WORKS
    ===================================================== */
 .how-it-works {

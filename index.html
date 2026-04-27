@@ -54,57 +54,20 @@
   <!-- ===== MAIN APP ===== -->
   <main class="main">
 
-    <!-- HERO -->
-    <section class="hero" id="home">
-      <div class="hero-inner">
+    <!-- COMPACT HERO BANNER -->
+    <section class="hero-compact" id="home">
+      <div class="hero-compact-inner">
         <div class="hero-badge">AI-Powered Legal Plain-English Decoder</div>
-        <h1 class="hero-title">Stop drowning in<br/><span class="gradient-text">policy jargon</span></h1>
-        <p class="hero-subtitle">
-          Upload any dense policy document — tax code, GDPR clause, HIPAA rule, employment contract —
-          and get a structured, plain-English breakdown tailored to your role. Then ask follow-up questions.
+        <h1 class="hero-title-compact">Stop drowning in <span class="gradient-text">policy jargon</span></h1>
+        <p class="hero-subtitle-compact">
+          Upload any dense policy document — tax code, GDPR, HIPAA, employment contract —
+          and get a plain-English breakdown in seconds. Then ask follow-up questions.
         </p>
-        <div class="hero-actions">
-          <a href="#upload-section" class="btn btn-primary btn-lg">Try it now →</a>
-          <a href="#how-it-works" class="btn btn-ghost btn-lg">See how it works</a>
-        </div>
         <div class="hero-chips">
           <span class="chip">📄 Tax Regulations</span>
           <span class="chip">🔒 GDPR &amp; Privacy</span>
           <span class="chip">🏥 HIPAA Rules</span>
           <span class="chip">👔 Employment Law</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="how-it-works" id="how-it-works">
-      <div class="section-inner">
-        <h2 class="section-title">How it works</h2>
-        <div class="steps-grid">
-          <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-icon">📂</div>
-            <h3>Upload your document</h3>
-            <p>PDF, DOCX, or plain text. Your file stays in your browser — it's never stored on any server.</p>
-          </div>
-          <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-icon">🎭</div>
-            <h3>Choose your role</h3>
-            <p>Tell us who you are so the breakdown is tailored to what actually matters for you.</p>
-          </div>
-          <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-icon">⚡</div>
-            <h3>Get your breakdown</h3>
-            <p>Receive a structured, plain-English analysis with key obligations, deadlines, and jargon explained.</p>
-          </div>
-          <div class="step">
-            <div class="step-number">4</div>
-            <div class="step-icon">💬</div>
-            <h3>Ask follow-up questions</h3>
-            <p>Chat with the document. Ask anything — the AI remembers the full context of your policy.</p>
-          </div>
         </div>
       </div>
     </section>
@@ -123,7 +86,7 @@
           </div>
           <div class="role-grid" id="roleGrid">
             <label class="role-card">
-              <input type="radio" name="role" value="individual" />
+              <input type="radio" name="role" value="individual" checked />
               <span class="role-icon">👤</span>
               <span class="role-name">Individual / Employee</span>
               <span class="role-desc">My personal rights &amp; obligations</span>
@@ -330,6 +293,39 @@
           <p class="chat-hint">Try: "What are the penalties for non-compliance?" or "Do I need to do anything before March?"</p>
         </div>
 
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="section-inner">
+        <h2 class="section-title">How it works</h2>
+        <div class="steps-grid">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-icon">📂</div>
+            <h3>Upload your document</h3>
+            <p>PDF, DOCX, or plain text. Your file stays in your browser — it's never stored on any server.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-icon">🎭</div>
+            <h3>Choose your role</h3>
+            <p>Tell us who you are so the breakdown is tailored to what actually matters for you.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-icon">⚡</div>
+            <h3>Get your breakdown</h3>
+            <p>Receive a structured, plain-English analysis with key obligations, deadlines, and jargon explained.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-icon">💬</div>
+            <h3>Ask follow-up questions</h3>
+            <p>Chat with the document. Ask anything — the AI remembers the full context of your policy.</p>
+          </div>
+        </div>
       </div>
     </section>
 

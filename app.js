@@ -13,8 +13,8 @@
 // STATE
 // =====================================================
 const state = {
-  model:       'gemini-2.5-flash-lite',
-  role:        '',
+  model:       'gemini-3.1-flash-lite-preview',
+  role:        'individual',
   rawText:     '',
   fileName:    '',
   fileSize:    0,
@@ -654,10 +654,10 @@ function resetApp() {
   state.fileSize    = 0;
   state.breakdown   = null;
   state.chatHistory = [];
-  state.role        = '';
+  state.role        = 'individual';
 
-  // Reset role selection
-  $$('input[name="role"]').forEach(r => r.checked = false);
+  // Reset role selection — default back to Individual/Employee
+  $$('input[name="role"]').forEach(r => { r.checked = r.value === 'individual'; });
 
   // Reset dropzone
   clearFile();
