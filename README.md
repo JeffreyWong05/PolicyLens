@@ -1,38 +1,56 @@
 # 🔍 PolicyLens — Plain-English Policy Decoder
 
-> Upload any dense policy document and get a structured, plain-English breakdown tailored to your role — plus a follow-up Q&A chat powered by Gemini AI.
+> Upload any dense policy document and get a structured, plain-English breakdown tailored to your role — plus a follow-up Q&A chat powered by Google Gemini AI.
 
 **[Live Demo →](https://YOUR-PROJECT.netlify.app)**
 
 ---
 
-## What it does
+## Overview
 
-PolicyLens takes dense policy documents (tax regulations, GDPR sections, HIPAA rules, employment contracts) and transforms them into:
+Legal and policy documents are notoriously difficult to read. PolicyLens solves this by combining client-side document parsing with AI-powered analysis to deliver structured, plain-English breakdowns — tailored to the reader's specific role and situation.
 
-- **TL;DR** — A 2-4 sentence plain-English summary
-- **Key Points** — The most important rules, explained simply
-- **Your Obligations** — What you specifically must do
-- **What It Means For You** — Role-tailored analysis (individual, business owner, HR, etc.)
+Users upload a PDF, DOCX, or plain text document, select who they are (individual, business owner, HR manager, etc.), and receive:
+
+- **TL;DR** — A concise 2–4 sentence summary of the document
+- **Key Points** — The most important rules and clauses, explained simply
+- **Obligations** — What the user specifically must do, and by when
+- **Role-Tailored Analysis** — Insights focused on what matters for their situation
 - **Deadlines** — Every date and timeline extracted and highlighted
 - **Action Items** — Concrete next steps
-- **Jargon Glossary** — Legal/technical terms defined in plain English
-- **Follow-up Q&A Chat** — Ask anything about the document
+- **Jargon Glossary** — Legal and technical terms defined in plain English
+- **Follow-up Q&A Chat** — Conversational interface to ask anything about the document
+
+---
+
+## Technical Architecture
+
+The application is entirely client-rendered with a single serverless backend function acting as a secure API proxy.
+
+```
+Browser
+  │
+  ├── PDF.js / Mammoth.js     (document text extraction — runs locally, no uploads)
+  │
+  └── POST /.netlify/functions/gemini
+          │
+          └── Google Gemini API   (AI analysis — key stored server-side only)
+```
+
+Documents never leave the user's browser. Only the extracted text is forwarded to the serverless proxy, which holds the Gemini API key as an environment variable — keeping credentials completely off the client.
 
 ---
 
 ## Tech Stack
 
-| Layer        | Technology                                                                  |
-|--------------|-----------------------------------------------------------------------------|
-| Frontend     | Pure HTML5, CSS3, Vanilla JavaScript (no build step)                        |
-| AI           | [Google Gemini API](https://ai.google.dev/gemini-api/docs) — free tier      |
-| API Proxy    | Netlify Function — keeps the API key secret on the server                   |
-| PDF Parsing  | [PDF.js](https://mozilla.github.io/pdf.js/) — runs in the browser           |
-| DOCX Parsing | [Mammoth.js](https://github.com/mwilliamson/mammoth.js) — runs in browser   |
-| Hosting      | [Netlify](https://netlify.com) — free tier, permanent                        |
-
-**Architecture:** Document text is extracted in the visitor's browser (no file uploads to any server). The text is sent to `/.netlify/functions/gemini` — a serverless function that holds the Gemini API key securely as an environment variable, forwards the request to Google, and returns the result. Visitors never need their own API key.
+| Layer | Technology |
+|---|---|
+| Frontend | HTML5, CSS3, Vanilla JavaScript (no build step, no dependencies) |
+| AI | [Google Gemini API](https://ai.google.dev/gemini-api/docs) via `v1beta` endpoint |
+| API Proxy | Netlify Serverless Function (Node.js) |
+| PDF Parsing | [PDF.js](https://mozilla.github.io/pdf.js/) — browser-based |
+| DOCX Parsing | [Mammoth.js](https://github.com/mwilliamson/mammoth.js) — browser-based |
+| Hosting | [Netlify](https://netlify.com) |
 
 ---
 
@@ -42,58 +60,19 @@ PolicyLens takes dense policy documents (tax regulations, GDPR sections, HIPAA r
 PolicyLens/
 ├── netlify/
 │   └── functions/
-│       └── gemini.js   # Netlify serverless function — secure API proxy
-├── index.html          # App shell and UI structure
-├── style.css           # All styles (dark mode, responsive design)
-├── app.js              # Core logic: file extraction, API calls, rendering, chat
-├── netlify.toml        # Netlify config (functions directory)
-├── package.json        # Node.js metadata
-└── README.md           # This file
+│       └── gemini.js   # Serverless API proxy — validates requests, holds API key
+├── index.html          # Application shell and UI
+├── style.css           # Styles: dark mode, responsive grid, animations
+├── app.js              # Core logic: file extraction, AI calls, rendering, chat
+├── netlify.toml        # Netlify configuration
+└── package.json        # Node.js metadata
 ```
-
----
-
-## Deploying to Netlify (Free, Permanent)
-
-### Step 1 — Push to GitHub
-
-In PowerShell inside your `PolicyLens` folder:
-
-```bash
-git add .
-git commit -m "Switch to Netlify"
-git push
-```
-
-### Step 2 — Connect to Netlify
-
-1. Go to [netlify.com](https://netlify.com) and click **Sign up** — use **GitHub** to sign in (free, no credit card)
-2. Click **Add new site → Import an existing project**
-3. Click **GitHub**, then find and select your **PolicyLens** repo
-4. Leave all build settings blank — no build command, no publish directory needed
-5. Click **Deploy site**
-
-### Step 3 — Add your API key
-
-1. In your Netlify project dashboard, go to **Site configuration → Environment variables**
-2. Click **Add a variable**:
-   - **Key:** `GEMINI_API_KEY`
-   - **Value:** your key from [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) (free, no credit card)
-3. Click **Save**
-
-### Step 4 — Redeploy
-
-Go to **Deploys** and click **Trigger deploy → Deploy site** so it picks up the new environment variable.
-
-Your site is live at `https://YOUR-PROJECT.netlify.app` — update the link at the top of this README.
-
-> Every future change is just `git add . && git commit -m "update" && git push` — Netlify auto-deploys within seconds.
 
 ---
 
 ## Running Locally
 
-For local development with the full serverless function working, use the Netlify CLI:
+Requires the [Netlify CLI](https://docs.netlify.com/cli/get-started/) to run the serverless function locally alongside the frontend.
 
 ```bash
 npm install -g netlify-cli
@@ -101,31 +80,33 @@ netlify login
 netlify dev
 ```
 
-Create a `.env` file in your project root (never commit this):
+Create a `.env` file in the project root (not committed):
 ```
-GEMINI_API_KEY=AIzaSy...your-key-here...
+GEMINI_API_KEY=your-key-here
 ```
 
-Open `http://localhost:8888` — the function runs automatically alongside the frontend.
+Open `http://localhost:8888`. The function runs automatically.
 
 ---
 
-## Key Features for Your Resume
+## Deployment
 
-- **Secure API proxy pattern** — Serverless function keeps credentials off the client; industry-standard approach for AI-powered web apps
-- **Prompt engineering** — Structured JSON output, role-aware system prompts, multi-turn context management
-- **Client-side document processing** — PDF and DOCX text extraction with no file uploads
-- **Modern CSS** — CSS custom properties, dark mode, responsive grid, animations
-- **UX polish** — Drag & drop upload, loading states, error handling, keyboard navigation
-- **Full-stack deployment** — Frontend + serverless backend on Netlify, zero server cost
+The app is deployed to Netlify. To deploy your own instance:
+
+1. Push the repo to GitHub
+2. Connect the repo in the [Netlify dashboard](https://app.netlify.com) — no build command or publish directory needed
+3. Add `GEMINI_API_KEY` as an environment variable under **Site configuration → Environment variables**
+4. Trigger a redeploy to pick up the key
+
+A free API key can be obtained from [Google AI Studio](https://aistudio.google.com/app/apikey).
 
 ---
 
 ## Privacy & Security
 
-- The Gemini API key is stored as a Netlify environment variable — never in your code or repo
-- Documents are extracted in the visitor's browser and never stored anywhere
-- Only extracted text is sent to `/.netlify/functions/gemini`, which forwards it to Google
+- The Gemini API key is stored exclusively as a Netlify environment variable — never in client code or version control
+- Documents are parsed entirely in the visitor's browser and are never transmitted to or stored on any server
+- The serverless proxy validates the request model and method before forwarding to Google
 - No analytics, no tracking, no cookies
 
 ---
@@ -139,7 +120,3 @@ PolicyLens provides plain-English summaries for **informational purposes only**.
 ## License
 
 MIT — free to use, modify, and distribute.
-
----
-
-*Built with the [Google Gemini API](https://ai.google.dev/gemini-api/docs). Hosted on [Netlify](https://netlify.com).*
