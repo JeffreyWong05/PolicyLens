@@ -2,7 +2,7 @@
 
 > Upload any dense policy document and get a structured, plain-English breakdown tailored to your role — plus a follow-up Q&A chat powered by Google Gemini AI.
 
-**[Live Demo →]([https://terms-and-conditions-translator1432d3.netlify.app/])**
+**[Live Demo →](https://terms-and-conditions-translator1432d3.netlify.app/)**
 
 ---
 
