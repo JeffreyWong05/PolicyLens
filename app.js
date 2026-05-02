@@ -678,6 +678,99 @@ function resetApp() {
 }
 
 // =====================================================
+// EXAMPLE POLICY DOCUMENT
+// =====================================================
+const EXAMPLE_POLICY = `ACME TECHNOLOGIES INC.
+EMPLOYEE DATA & REMOTE WORK POLICY
+Version 2.1 — Effective Date: January 1, 2025
+Last Reviewed: October 15, 2024
+
+1. PURPOSE AND SCOPE
+
+This Policy governs the collection, processing, and protection of personal data by Acme Technologies Inc. ("the Company") and establishes standards for employees working remotely. It applies to all full-time employees, part-time employees, contractors, and third-party vendors who access Company systems or handle personal data on behalf of the Company.
+
+This Policy is issued in compliance with the General Data Protection Regulation (EU) 2016/679 ("GDPR"), the California Consumer Privacy Act ("CCPA"), and applicable federal employment law.
+
+2. DATA CLASSIFICATION AND HANDLING
+
+2.1 Personal Data
+"Personal data" means any information relating to an identified or identifiable natural person (a "data subject"). This includes, but is not limited to: names, email addresses, national identification numbers, location data, IP addresses, and any data that could be used to identify an individual directly or indirectly.
+
+2.2 Sensitive Personal Data
+Employees may not collect or process special categories of data — including health records, biometric data, religious beliefs, or political opinions — without explicit written authorization from the Data Protection Officer ("DPO") and documented consent from the data subject.
+
+2.3 Data Minimization
+Employees must collect only the minimum personal data necessary for the stated business purpose (the principle of data minimization). Collecting data "just in case" is a violation of this Policy and may constitute a breach of GDPR Article 5.
+
+3. EMPLOYEE OBLIGATIONS
+
+3.1 Training
+All employees with access to personal data must complete the Company's annual Data Privacy Training by March 31 of each calendar year. New hires must complete this training within 30 days of their start date. Failure to complete training by the deadline will result in suspension of system access until compliance is confirmed.
+
+3.2 Device Security
+Employees working remotely must ensure that:
+(a) All Company devices are protected with a password or biometric lock.
+(b) Full-disk encryption is enabled on laptops (FileVault on macOS; BitLocker on Windows).
+(c) Automatic screen lock activates after no more than 5 minutes of inactivity.
+(d) Public Wi-Fi networks are never used to access Company systems without an active VPN connection.
+
+3.3 Incident Reporting
+Any suspected or confirmed data breach — including lost devices, unauthorized access, or accidental disclosure — must be reported to the DPO within 24 hours of discovery. The DPO is required by law to notify the relevant supervisory authority within 72 hours of becoming aware of a breach affecting the rights and freedoms of data subjects (GDPR Article 33). Employees who fail to report an incident promptly may be subject to disciplinary action, up to and including termination.
+
+4. REMOTE WORK STANDARDS
+
+4.1 Eligible Roles
+Remote work is permitted for roles designated as "remote-eligible" in the employee's contract. Employees wishing to change their work location permanently must submit a Remote Work Amendment Request at least 60 days in advance. Requests are subject to managerial and HR approval.
+
+4.2 Home Office Requirements
+Employees are responsible for maintaining a safe and productive home work environment. The Company will reimburse up to $500 per calendar year for qualifying home office expenses (ergonomic equipment, monitors, internet upgrades). Reimbursement claims must be submitted via the expense portal by December 15 of the applicable year. Claims submitted after this date will not be processed.
+
+4.3 Core Hours
+Remote employees must be available and responsive during core hours of 10:00 AM – 3:00 PM in their designated time zone, Monday through Friday, excluding public holidays.
+
+5. DATA RETENTION AND DELETION
+
+Personal data collected in the course of employment will be retained for no longer than 7 years after the termination of the employment relationship, unless a longer retention period is required by law. Upon request, employees may ask the DPO for a copy of their personal data held by the Company (Subject Access Request). The Company will respond to such requests within 30 days.
+
+6. CONSEQUENCES OF NON-COMPLIANCE
+
+Violations of this Policy may result in disciplinary action proportionate to the severity of the breach, up to and including termination of employment. In cases involving willful misuse of personal data, the Company reserves the right to pursue civil or criminal remedies as permitted by applicable law. Regulatory fines under GDPR can reach €20 million or 4% of annual global turnover, whichever is higher.
+
+7. POLICY REVIEW
+
+This Policy will be reviewed annually by the Legal and HR departments. Employees will be notified of material changes by email at least 14 days before the effective date of any revision. Continued employment following notification constitutes acceptance of the updated Policy.
+
+For questions, contact: privacy@acmetech.example.com
+Data Protection Officer: compliance@acmetech.example.com`;
+
+function loadExample() {
+  state.rawText  = EXAMPLE_POLICY;
+  state.fileName = 'Acme_Employee_Data_Remote_Work_Policy.txt';
+  state.fileSize = new Blob([EXAMPLE_POLICY]).size;
+
+  // Show the loaded state in the dropzone
+  hide($('#dropzoneIdle'));
+  show($('#dropzoneLoaded'));
+  $('#filePreview').innerHTML = `
+    <span class="file-preview-icon">📄</span>
+    <div>
+      <div class="file-preview-name">${state.fileName}</div>
+      <div class="file-preview-size">${formatBytes(state.fileSize)} · ${EXAMPLE_POLICY.length.toLocaleString()} characters · Example document</div>
+    </div>
+  `;
+
+  // Show text preview
+  show($('#extractedPreview'));
+  $('#charCount').textContent = `${EXAMPLE_POLICY.length.toLocaleString()} chars`;
+  $('#extractedText').textContent = EXAMPLE_POLICY.substring(0, 800) + '\n\n[… preview truncated]';
+
+  updateAnalyzeButton();
+
+  // Scroll smoothly to the analyze button
+  $('#analyzeBtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// =====================================================
 // XSS HELPER
 // =====================================================
 function escHtml(str) {
@@ -728,6 +821,9 @@ function initEventListeners() {
       sendChatMessage();
     }
   });
+
+  // Example document
+  $('#loadExampleBtn')?.addEventListener('click', loadExample);
 
   // Error toast dismiss
   $('#closeError').addEventListener('click', () => hide($('#errorToast')));

@@ -659,6 +659,35 @@ a:hover { text-decoration: underline; }
 .file-preview-name { font-size: 0.875rem; font-weight: 600; }
 .file-preview-size { font-size: 0.78rem; color: var(--text-muted); }
 
+/* EXAMPLE DOCUMENT ROW */
+.example-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.example-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.btn-example {
+  background: none;
+  border: 1px dashed var(--primary);
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-family: var(--font-sans);
+}
+.btn-example:hover {
+  background: var(--primary-light);
+}
+
 /* EXTRACTED TEXT PREVIEW */
 .extracted-preview {
   margin-top: 1rem;
