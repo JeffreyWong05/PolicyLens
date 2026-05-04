@@ -482,10 +482,11 @@ async function analyzeDocument() {
 
   state.isAnalyzing = true;
 
-  // UI: show spinner
+  // UI: show spinner + waiting hint
   hide($('#analyzeBtnText'));
   show($('#analyzeSpinner'));
   $('#analyzeBtn').disabled = true;
+  $('#analyzeHint').innerHTML = '⏳ Hang tight — this usually takes 5–15 seconds. If nothing happens, wait a moment and try again.';
 
   // Hide results section if visible
   hide($('#resultsSection'));
@@ -531,6 +532,7 @@ async function analyzeDocument() {
     show($('#analyzeBtnText'));
     $('#analyzeBtn').disabled = false;
     updateAnalyzeButton();
+    $('#analyzeHint').innerHTML = '';
   }
 }
 
